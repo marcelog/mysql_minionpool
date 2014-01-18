@@ -89,7 +89,6 @@ function MysqlMinionPool(options) {
         superMinionTaskHandler(row, state, callbackRow)
       },
       poolEnd: function() {
-        console.log('done page');
         callback(state);
       }
     }, rows);
