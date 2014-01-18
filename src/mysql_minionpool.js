@@ -31,7 +31,7 @@ function MysqlMinionPool(options) {
   var superMinionEnd = this.dummyMinionEnd;
   var superTaskSourceEnd = this.dummyTaskSourceEnd;
   var superTaskSourceNext = options.taskSourceNext;
-  var superPoolEnd = options.poolEnd;
+  var superPoolEnd = this.dummyPoolEnd;
   var superMinionTaskHandler = options.minionTaskHandler;
 
   if(options.taskSourceStart !== undefined) {
@@ -45,6 +45,10 @@ function MysqlMinionPool(options) {
   }
   if(options.minionEnd !== undefined) {
     superMinionEnd = options.minionEnd;
+  }
+
+  if(options.poolEnd !== undefined) {
+    superMinionEnd = options.poolEnd;
   }
 
   options.minionStart = function(callback) {
