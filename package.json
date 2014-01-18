@@ -1,0 +1,20 @@
+{
+  "author": "Marcelo Gornstein <marcelog@gmail.com>",
+  "name": "mysql_minionpool",
+  "description": "A mysql minionpool, suitable to work on rows",
+  "version": "0.0.1",
+  "homepage": "https://github.com/marcelog/mysql_minionpool",
+  "keywords": [
+    "worker", "pool", "task", "consumer", "mysql"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/marcelog/mysql_minionpool.git"
+  },
+  "main": "src/mysql_minionpool",
+  "dependencies": {
+    "minionpool": "0.0.8",
+    "mysql": "2.0.0"
+  },
+  "devDependencies": {}
+}
