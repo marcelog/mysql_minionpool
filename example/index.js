@@ -26,7 +26,6 @@ var pool = new mysqlMinionPoolMod.MysqlMinionPool({
     host: '127.0.0.1',
     user: 'root',
     password: 'pass',
-    database: 'db',
     port: 3306
   },
   concurrency: 5,    // How many pages to get concurrently...
@@ -36,24 +35,29 @@ var pool = new mysqlMinionPoolMod.MysqlMinionPool({
   logger: console.log,
 
   taskSourceStart: function(callback) {
-    callback({page: 0, pageSize: 5});
+    callback(undefined, {page: 0, pageSize: 5});
   },
   taskSourceNext: function(state, callback) {
     var db = 'db';
     var table = 'table';
     var query = "SELECT * FROM `" + db + "`.`" + table + "` LIMIT ?,?";
     state.mysqlPool.getConnection(function(err, mysqlConnection) {
-      mysqlConnection.query(
-        query, [state.page * state.pageSize, state.pageSize], function(err, rows) {
-          mysqlConnection.release();
-          if(err) throw err;
-          if(rows.length === 0) {
-            callback(undefined);
-          } else {
-            callback(rows);
+      if(err) {
+        callback(err, undefined);
+      } else {
+        mysqlConnection.query(
+          query, [state.page * state.pageSize, state.pageSize], function(err, rows) {
+            mysqlConnection.release();
+            if(err) {
+              callback(err, undefined);
+            } else if(rows.length === 0) {
+              callback(undefined, undefined);
+            } else {
+              callback(undefined, rows);
+            }
           }
-        }
-      );
+        );
+      }
     });
     state.page++;
     return state;
@@ -63,7 +67,7 @@ var pool = new mysqlMinionPoolMod.MysqlMinionPool({
   },
   minionTaskHandler: function(task, state, callback) {
     console.log('item: ' + util.inspect(task));
-    callback(state);
+    callback(undefined, state);
   }
 });
 pool.start();

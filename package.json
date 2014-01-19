@@ -13,7 +13,7 @@
   },
   "main": "src/mysql_minionpool",
   "dependencies": {
-    "minionpool": "0.0.8",
+    "minionpool": "0.0.9",
     "mysql": "2.0.0"
   },
   "devDependencies": {}

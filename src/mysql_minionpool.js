@@ -28,7 +28,6 @@ function MysqlMinionPool(options) {
   var mysqlPool = mysql.createPool(options.mysqlConfig);
   var superTaskSourceStart = this.dummyTaskSourceStart;
   var superMinionStart = this.dummyMinionStart;
-  var superMinionEnd = this.dummyMinionEnd;
   var superTaskSourceEnd = this.dummyTaskSourceEnd;
   var superTaskSourceNext = options.taskSourceNext;
   var superPoolEnd = this.dummyPoolEnd;
@@ -52,14 +51,11 @@ function MysqlMinionPool(options) {
   }
 
   options.minionStart = function(callback) {
-    superMinionStart(function(state) {
+    superMinionStart(function(err, state) {
       state.mysqlPool = mysqlPool;
-      callback(state);
+      callback(err, state);
     });
   };
-  options.minionEnd = function(state, callback) {
-    superMinionEnd(state, callback);
-  };    
   options.poolEnd = function() {
     superPoolEnd();
   };    
@@ -70,9 +66,9 @@ function MysqlMinionPool(options) {
   }
   if(options.taskSourceStart !== undefined) {
     options.taskSourceStart = function(callback) {
-      superTaskSourceStart(function(state) {
+      superTaskSourceStart(function(err, state) {
         state.mysqlPool = mysqlPool;
-        callback(state);
+        callback(err, state);
       });
     };
   }
@@ -82,6 +78,7 @@ function MysqlMinionPool(options) {
   options.minionTaskHandler = function(rows, state, callback) {
     var rowPool = new minionPoolMod.ArrayMinionPool({
       concurrency: options.rowConcurrency,
+      continueOnError: options.continueOnError,
       debug: options.debug,
       logger: options.logger,
       name: options.name + ' row',
@@ -89,7 +86,7 @@ function MysqlMinionPool(options) {
         superMinionTaskHandler(row, state, callbackRow)
       },
       poolEnd: function() {
-        callback(state);
+        callback(undefined, state);
       }
     }, rows);
     rowPool.start();
