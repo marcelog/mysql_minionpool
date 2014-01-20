@@ -28,6 +28,7 @@ var pool = new mysqlMinionPoolMod.MysqlMinionPool({
 
   // Since we're paginating, let's create a state where we can store the
   // current page and the total rows per page.
+  // First argument is the error, if something failed.
   taskSourceStart: function(callback) {
     callback(undefined, {page: 0, pageSize: 10});
   },
@@ -43,6 +44,7 @@ var pool = new mysqlMinionPoolMod.MysqlMinionPool({
       mysqlConnection.query(
         query, [state.page * state.pageSize, state.pageSize], function(err, rows) {
           mysqlConnection.release();
+          // First argument for the callback is the error, if something failed.
           if(err) {
             callback(err, undefined);
           } else if(rows.length === 0) {
@@ -60,6 +62,7 @@ var pool = new mysqlMinionPoolMod.MysqlMinionPool({
   // The handle also gets state.mysqlPool.
   minionTaskHandler: function(task, state, callback) {
     console.log('item: ' + util.inspect(task));
+    // First argument is the error, if something failed.
     callback(undefined, state);
   },
 
