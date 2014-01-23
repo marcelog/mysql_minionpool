@@ -41,19 +41,23 @@ var pool = new mysqlMinionPoolMod.MysqlMinionPool({
     var table = 'table';
     var query = "SELECT * FROM `" + db + "`.`" + table + "` LIMIT ?,?";
     state.mysqlPool.getConnection(function(err, mysqlConnection) {
-      mysqlConnection.query(
-        query, [state.page * state.pageSize, state.pageSize], function(err, rows) {
-          mysqlConnection.release();
-          // First argument for the callback is the error, if something failed.
-          if(err) {
-            callback(err, undefined);
-          } else if(rows.length === 0) {
-            callback(undefined, undefined);
-          } else {
-            callback(undefined, rows);
+      if(err) {
+        callback(err, undefined);
+      } else {
+        mysqlConnection.query(
+          query, [state.page * state.pageSize, state.pageSize], function(err, rows) {
+            mysqlConnection.release();
+            // First argument for the callback is the error, if something failed.
+            if(err) {
+              callback(err, undefined);
+            } else if(rows.length === 0) {
+              callback(undefined, undefined);
+            } else {
+              callback(undefined, rows);
+            }
           }
-        }
-      );
+        );
+      }
     });
     state.page++;
     return state;
