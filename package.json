@@ -2,7 +2,7 @@
   "author": "Marcelo Gornstein <marcelog@gmail.com>",
   "name": "mysql_minionpool",
   "description": "A mysql minionpool, suitable to work on rows",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://github.com/marcelog/mysql_minionpool",
   "keywords": [
     "worker", "pool", "task", "consumer", "mysql"
