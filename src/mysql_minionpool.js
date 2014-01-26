@@ -47,7 +47,7 @@ function MysqlMinionPool(options) {
   }
 
   if(options.poolEnd !== undefined) {
-    superMinionEnd = options.poolEnd;
+    superPoolEnd = options.poolEnd;
   }
 
   options.minionStart = function(callback) {
