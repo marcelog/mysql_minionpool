@@ -76,3 +76,10 @@ var pool = new mysqlMinionPoolMod.MysqlMinionPool({
 });
 pool.start();
 ```
+
+## Using multiple cores
+
+In the case of having rabbitmq and mysql workers, it's very useful to take advantage
+of multicore cpu's. For this, you can use [taskset](http://linuxcommand.org/man_pages/taskset1.html)
+and launch multiple minionpool instances on different cores.
+
